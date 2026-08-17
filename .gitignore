@@ -1,0 +1,13 @@
+# Windows
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# Editor / OS
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Node
+node_modules/
