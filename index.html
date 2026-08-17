@@ -37,6 +37,23 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
 a{color:inherit;text-decoration:none}
 ::selection{background:var(--mint);color:#00140d}
 
+/* ===== loader (first-visit intro) ===== */
+#loader{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;
+  background:radial-gradient(120% 120% at 50% 40%,var(--bg2),var(--bg) 70%);
+  transition:opacity .7s ease,visibility .7s ease}
+#loader.hide{opacity:0;visibility:hidden}
+#loader .ring{position:relative;width:84px;height:84px}
+#loader .ring span{position:absolute;inset:0;border-radius:50%;border:2px solid transparent}
+#loader .ring span:nth-child(1){border-top-color:var(--teal);animation:spin 1s linear infinite}
+#loader .ring span:nth-child(2){inset:10px;border-top-color:var(--mint);border-right-color:var(--mint);animation:spin 1.4s linear infinite reverse}
+#loader .ring span:nth-child(3){inset:22px;border-top-color:var(--aqua);animation:spin .8s linear infinite}
+#loader .lname{font-family:"Pinyon Script";font-size:34px;color:var(--ink);letter-spacing:.02em;animation:breath 1.8s ease-in-out infinite}
+#loader .ltip{font-family:"Oswald";text-transform:uppercase;letter-spacing:.32em;font-size:11px;color:var(--dim);animation:breath 1.8s ease-in-out infinite .3s}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breath{0%,100%{opacity:.45}50%{opacity:1}}
+/* when already visited, hide instantly without animation */
+#loader.instant{display:none}
+
 /* font roles */
 .script{font-family:"Pinyon Script",cursive;font-weight:400;line-height:.9}
 .brush{font-family:"Caveat",cursive;font-weight:700;line-height:1}
@@ -323,6 +340,12 @@ html{scroll-behavior:smooth}
 </style>
 </head>
 <body>
+<!-- first-visit loading screen -->
+<div id="loader">
+  <div class="ring"><span></span><span></span><span></span></div>
+  <div class="lname">Youth Sonata</div>
+  <div class="ltip">Loading</div>
+</div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -532,6 +555,22 @@ addEventListener('scroll',()=>{
   toTop.classList.toggle('show',scrollY>500);
 });
 toTop.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+
+/* first-visit loading screen */
+(function(){
+  const loader=document.getElementById('loader');
+  const KEY='ys_loaded';
+  if(localStorage.getItem(KEY)){loader.classList.add('instant');return;}
+  const done=()=>{
+    loader.classList.add('hide');
+    try{localStorage.setItem(KEY,'1');}catch(e){}
+    setTimeout(()=>loader.remove(),800);
+  };
+  if(document.readyState==='complete'){setTimeout(done,500);}
+  else{window.addEventListener('load',()=>setTimeout(done,500));
+    /* safety: never block longer than 3.5s */
+    setTimeout(done,3500);}
+})();
 </script>
 </body>
 </html>
