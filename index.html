@@ -559,6 +559,12 @@ toTop.onclick=()=>scrollTo({top:0,behavior:'smooth'});
 (function(){
   const loader=document.getElementById('loader');
   const KEY='ys_loaded';
+  /* 每次刷新都从页面最顶部开始，禁用浏览器滚动位置恢复 */
+  if('scrollRestoration' in history) history.scrollRestoration='manual';
+  document.documentElement.style.scrollBehavior='auto';
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
+  document.documentElement.style.scrollBehavior='smooth';
   if(localStorage.getItem(KEY)){loader.classList.add('instant');return;}
   const done=()=>{
     loader.classList.add('hide');
