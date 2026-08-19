@@ -70,12 +70,20 @@ a{color:inherit;text-decoration:none}
     var(--deep);
   transition:opacity .6s ease,visibility .6s ease}
 #loader.hide{opacity:0;visibility:hidden}
-#loader .frame{position:relative;width:200px;height:200px;display:flex;align-items:center;justify-content:center}
+#loader .frame{position:relative;width:220px;height:220px;display:flex;align-items:center;justify-content:center}
 #loader .frame::before{content:"";position:absolute;inset:0;border:1px solid var(--line2);clip-path:var(--cut)}
-#loader .frame::after{content:"";position:absolute;inset:0;background:var(--hatch);clip-path:var(--cut);opacity:.6}
-#loader .frame .core{font-family:var(--disp);font-size:52px;letter-spacing:.02em;color:var(--lime);opacity:.9}
-#loader .lname{font-family:var(--disp);font-size:26px;letter-spacing:.26em;color:var(--ink);text-transform:uppercase}
-#loader .lbar{width:200px;height:2px;background:var(--line);position:relative;overflow:hidden}
+#loader .frame::after{content:"";position:absolute;inset:0;background:var(--hatch);clip-path:var(--cut);opacity:.55}
+/* 旋转刻度环 */
+#loader .ring{position:absolute;inset:16px;animation:lrot 8s linear infinite}
+#loader .ring span{position:absolute;left:50%;top:0;width:1px;height:12px;background:var(--line2);transform-origin:50% 94px}
+@keyframes lrot{to{transform:rotate(360deg)}}
+/* 反向旋转虚线圈 */
+#loader .dash{position:absolute;inset:34px;border:1px dashed rgba(255,250,0,.35);border-radius:50%;animation:lrotR 12s linear infinite}
+@keyframes lrotR{to{transform:rotate(-360deg)}}
+#loader .core{position:relative;font-family:var(--disp);font-size:56px;letter-spacing:.02em;color:var(--lime);opacity:.92}
+#loader .lname{font-family:var(--disp);font-size:26px;letter-spacing:.3em;color:var(--ink);text-transform:uppercase;text-align:center}
+#loader .lname small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--dim);margin-top:10px}
+#loader .lbar{width:220px;height:2px;background:var(--line);position:relative;overflow:hidden}
 #loader .lbar i{position:absolute;inset:0;background:var(--lime);transform:scaleX(0);transform-origin:left;transition:transform .25s linear}
 #loader .ltip{font-family:var(--mono);text-transform:uppercase;letter-spacing:.34em;font-size:10px;color:var(--dim)}
 #loader .ltip b{color:var(--lime);font-weight:500}
@@ -396,8 +404,12 @@ html{scroll-behavior:smooth}
 <body>
 <!-- first-visit loading screen -->
 <div id="loader">
-  <div class="frame"><div class="core">YS</div></div>
-  <div class="lname">Youth Sonata</div>
+  <div class="frame">
+    <div class="ring" id="lring"></div>
+    <div class="dash"></div>
+    <div class="core">YS</div>
+  </div>
+  <div class="lname">Youth Sonata<small>// INITIALIZING SEQUENCE</small></div>
   <div class="lbar"><i id="lbarFill"></i></div>
   <div class="ltip">LOADING <b id="lpct">0%</b></div>
 </div>
@@ -672,6 +684,9 @@ requestAnimationFrame(()=>revealEls.forEach(el=>{
   const loader=document.getElementById('loader');
   const fill=document.getElementById('lbarFill');
   const pct=document.getElementById('lpct');
+  /* 生成旋转刻度 */
+  const lring=document.getElementById('lring');
+  if(lring){for(let i=0;i<36;i++){const s=document.createElement('span');s.style.transform=`rotate(${i*10}deg)`;lring.appendChild(s);}}
   /* 每次刷新都从页面最顶部开始，禁用浏览器滚动位置恢复 */
   if('scrollRestoration' in history) history.scrollRestoration='manual';
   document.documentElement.style.scrollBehavior='auto';
