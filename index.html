@@ -352,12 +352,6 @@ footer .meta{font-family:var(--mono);margin-top:26px;color:var(--dim);font-size:
 
 /* ===== 滚动进度条 + 锚点指示器 ===== */
 #progress{position:fixed;top:0;left:0;height:2px;background:var(--lime);width:0;z-index:80;box-shadow:0 0 8px rgba(255,250,0,.6)}
-#rail{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:22px}
-#rail a{display:flex;align-items:center;gap:10px;flex-direction:row-reverse}
-#rail .rdot{width:9px;height:9px;border:1px solid var(--dim);transform:rotate(45deg);transition:background .3s,border-color .3s,transform .3s}
-#rail a.on .rdot{background:var(--lime);border-color:var(--lime);transform:rotate(45deg) scale(1.25)}
-#rail .rlab{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);opacity:0;transform:translateX(6px);transition:opacity .25s,transform .25s}
-#rail a:hover .rlab,#rail a.on .rlab{opacity:1;transform:none;color:var(--lime)}
 
 /* ===== back-to-top ===== */
 #toTop{position:fixed;right:26px;bottom:26px;z-index:70;width:46px;height:46px;border:1px solid var(--line2);background:rgba(12,14,13,.92);color:var(--lime);cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .4s,transform .4s,background .3s,border-color .3s;clip-path:var(--cut)}
@@ -380,7 +374,6 @@ html{scroll-behavior:smooth}
   .trow{grid-template-columns:90px 1fr 110px}
   .trow .tvenue{display:none}
   .hero-script{display:none}
-  #rail{display:none}
 }
 @media(max-width:640px){
   .navlinks{display:none}
@@ -432,14 +425,6 @@ html{scroll-behavior:smooth}
 </nav>
 
 <!-- 右侧锚点指示器 -->
-<div id="rail">
-  <a href="#home" data-sec="home"><span class="rlab">首页</span><span class="rdot"></span></a>
-  <a href="#about" data-sec="about"><span class="rlab">简介</span><span class="rdot"></span></a>
-  <a href="#members" data-sec="members"><span class="rlab">成员</span><span class="rdot"></span></a>
-  <a href="#news" data-sec="news"><span class="rlab">动态</span><span class="rdot"></span></a>
-  <a href="#contact" data-sec="contact"><span class="rlab">联系</span><span class="rdot"></span></a>
-</div>
-
 <!-- HERO -->
 <header class="hero" id="home">
   <div class="hero-script">Youth<br>Sonata</div>
@@ -639,7 +624,6 @@ navlinks.querySelectorAll('a').forEach(a=>a.onclick=()=>navlinks.classList.remov
 
 const secIds=['home','about','members','news','contact'];
 const navAs=[...document.querySelectorAll('.navlinks a')];
-const railAs=[...document.querySelectorAll('#rail a')];
 function onScroll(){
   const y=scrollY;
   nav.classList.toggle('solid',y>40);
@@ -653,7 +637,6 @@ function onScroll(){
     if(el&&el.getBoundingClientRect().top<=innerHeight*.4)cur=id;
   });
   navAs.forEach(a=>a.classList.toggle('on',a.dataset.sec===cur));
-  railAs.forEach(a=>a.classList.toggle('on',a.dataset.sec===cur));
 }
 addEventListener('scroll',onScroll,{passive:true});
 onScroll();
