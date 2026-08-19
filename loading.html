@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Youth Sonata — Loading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Archivo+Black&family=JetBrains+Mono:wght@400;500;700&family=Anton&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#141414;--bg2:#1b1b1b;--ink:#f0f0f0;--dim:#858585;--dim2:#5a5a5a;
+  --line:rgba(240,240,240,.13);--line2:rgba(240,240,240,.26);
+  --lime:#fffa00;--deep:#0e0e0e;
+  --mono:"JetBrains Mono","PingFang SC","Microsoft YaHei",monospace;
+  --disp:"Anton","Archivo","PingFang SC","Microsoft YaHei",sans-serif;
+  --cut:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+  --hatch:repeating-linear-gradient(-45deg,rgba(255,250,0,.06) 0 2px,transparent 2px 10px);
+  --hatch-dense:repeating-linear-gradient(-45deg,rgba(240,240,240,.05) 0 1px,transparent 1px 6px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--deep);color:var(--ink);font-family:var(--mono);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:38px;overflow:hidden;position:relative;
+}
+body::before{content:"";position:fixed;inset:0;background:var(--hatch-dense);opacity:.5;pointer-events:none}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(rgba(240,240,240,.04) 1px,transparent 1px);background-size:26px 26px;pointer-events:none}
+::selection{background:var(--lime);color:#0e0e0e}
+
+/* 四角 HUD 标注 */
+.corner{position:fixed;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);z-index:2}
+.corner.tl{top:24px;left:28px}
+.corner.tr{top:24px;right:28px;text-align:right}
+.corner.bl{bottom:24px;left:28px}
+.corner.br{bottom:24px;right:28px;text-align:right}
+.corner .a{color:var(--lime)}
+
+/* 主加载装置 */
+.stage{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:36px}
+
+/* 外框 */
+.frame{position:relative;width:220px;height:220px;display:flex;align-items:center;justify-content:center}
+.frame::before{content:"";position:absolute;inset:0;border:1px solid var(--line2);clip-path:var(--cut)}
+.frame::after{content:"";position:absolute;inset:0;background:var(--hatch);clip-path:var(--cut);opacity:.55}
+
+/* 旋转刻度环 */
+.ring{position:absolute;inset:16px;animation:rot 8s linear infinite}
+.ring span{position:absolute;left:50%;top:0;width:1px;height:12px;background:var(--line2);transform-origin:50% 94px}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* 反向旋转虚线圈 */
+.dash{position:absolute;inset:34px;border:1px dashed rgba(255,250,0,.35);border-radius:50%;animation:rotR 12s linear infinite}
+@keyframes rotR{to{transform:rotate(-360deg)}}
+
+/* 中心字 */
+.core{position:relative;font-family:var(--disp);font-size:56px;letter-spacing:.02em;color:var(--lime);opacity:.92}
+
+/* 名称 */
+.lname{font-family:var(--disp);font-size:26px;letter-spacing:.3em;text-transform:uppercase;text-align:center}
+.lname small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--dim);margin-top:10px}
+
+/* 进度条 */
+.bar{width:220px;height:2px;background:var(--line);position:relative;overflow:hidden}
+.bar i{position:absolute;inset:0;background:var(--lime);transform:scaleX(0);transform-origin:left;transition:transform .2s linear}
+/* 百分比 */
+.pct{font-size:11px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase}
+.pct b{color:var(--lime);font-weight:500}
+
+/* 完成后的进入按钮 */
+.enter{margin-top:6px;font-family:var(--mono);letter-spacing:.2em;font-size:11px;text-transform:uppercase;
+  padding:14px 34px;border:1px solid var(--lime);color:var(--lime);background:transparent;cursor:pointer;
+  clip-path:var(--cut);position:relative;overflow:hidden;opacity:0;transform:translateY(10px);
+  transition:opacity .5s ease,transform .5s ease,color .3s;pointer-events:none}
+.enter span{position:relative;z-index:2}
+.enter::before{content:"";position:absolute;inset:0;background:var(--lime);transform:translateX(-101%);transition:transform .3s cubic-bezier(.7,0,.3,1);z-index:1}
+.enter:hover{color:#0e0e0e}
+.enter:hover::before{transform:translateX(0)}
+.enter.ready{opacity:1;transform:none;pointer-events:auto}
+
+/* 演示控制（仅本页用） */
+.demo{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:5;display:flex;gap:10px}
+.demo button{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;background:transparent;border:1px solid var(--line2);color:var(--dim);padding:7px 14px;cursor:pointer;transition:color .2s,border-color .2s}
+.demo button:hover{color:var(--lime);border-color:var(--lime)}
+</style>
+</head>
+<body>
+<div class="corner tl">YS // SYS_BOOT<br>MODULE_00</div>
+<div class="corner tr">YOUTH SONATA<br><span class="a">LOADING</span></div>
+<div class="corner bl">EST.2025 // 学生摇滚乐队</div>
+<div class="corner br">VER 2.0 // <span class="a">ONLINE</span></div>
+
+<div class="stage">
+  <div class="frame">
+    <div class="ring" id="ring"></div>
+    <div class="dash"></div>
+    <div class="core">YS</div>
+  </div>
+  <div class="lname">Youth Sonata<small>// INITIALIZING SEQUENCE</small></div>
+  <div class="bar"><i id="barFill"></i></div>
+  <div class="pct">LOADING <b id="pct">0%</b></div>
+  <button class="enter" id="enterBtn"><span>进入网站 →</span></button>
+</div>
+
+<div class="demo">
+  <button onclick="replay()">REPLAY</button>
+  <button onclick="finishNow()">SKIP</button>
+</div>
+
+<script>
+/* 生成旋转刻度 */
+const ring=document.getElementById('ring');
+for(let i=0;i<36;i++){const s=document.createElement('span');s.style.transform=`rotate(${i*10}deg)`;ring.appendChild(s);}
+
+const barFill=document.getElementById('barFill');
+const pct=document.getElementById('pct');
+const enterBtn=document.getElementById('enterBtn');
+let raf=null,t0=0;
+const DUR=2600;
+
+function start(){
+  cancelAnimationFrame(raf);
+  enterBtn.classList.remove('ready');
+  barFill.style.transition='none';barFill.style.transform='scaleX(0)';
+  pct.textContent='0%';
+  void barFill.offsetWidth;
+  barFill.style.transition='transform .2s linear';
+  t0=performance.now();
+  raf=requestAnimationFrame(tick);
+}
+function tick(now){
+  const p=Math.min((now-t0)/DUR,1);
+  /* easeInOutCubic 让进度有节奏 */
+  const e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+  barFill.style.transform=`scaleX(${e})`;
+  pct.textContent=Math.round(e*100)+'%';
+  if(p<1)raf=requestAnimationFrame(tick);
+  else setTimeout(()=>enterBtn.classList.add('ready'),250);
+}
+function replay(){start();}
+function finishNow(){
+  cancelAnimationFrame(raf);
+  barFill.style.transform='scaleX(1)';
+  pct.textContent='100%';
+  enterBtn.classList.add('ready');
+}
+enterBtn.onclick=()=>{location.href='index.html';};
+
+start();
+</script>
+</body>
+</html>
