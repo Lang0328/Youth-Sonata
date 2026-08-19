@@ -54,7 +54,8 @@ body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(r
 @keyframes rotR{to{transform:rotate(-360deg)}}
 
 /* 中心字 */
-.core{position:relative;font-family:var(--disp);font-size:56px;letter-spacing:.02em;color:var(--lime);opacity:.92}
+.core{position:relative;width:110px;height:110px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.core img{width:100%;height:100%;object-fit:cover;opacity:.95}
 
 /* 名称 */
 .lname{font-family:var(--disp);font-size:26px;letter-spacing:.3em;text-transform:uppercase;text-align:center}
@@ -94,7 +95,7 @@ body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(r
   <div class="frame">
     <div class="ring" id="ring"></div>
     <div class="dash"></div>
-    <div class="core">YS</div>
+    <div class="core"><img src="assets/image.png" alt="Youth Sonata"></div>
   </div>
   <div class="lname">Youth Sonata<small>// INITIALIZING SEQUENCE</small></div>
   <div class="bar"><i id="barFill"></i></div>

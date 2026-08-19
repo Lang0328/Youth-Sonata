@@ -80,7 +80,8 @@ a{color:inherit;text-decoration:none}
 /* 反向旋转虚线圈 */
 #loader .dash{position:absolute;inset:34px;border:1px dashed rgba(255,250,0,.35);border-radius:50%;animation:lrotR 12s linear infinite}
 @keyframes lrotR{to{transform:rotate(-360deg)}}
-#loader .core{position:relative;font-family:var(--disp);font-size:56px;letter-spacing:.02em;color:var(--lime);opacity:.92}
+#loader .core{position:relative;width:110px;height:110px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#loader .core img{width:100%;height:100%;object-fit:cover;opacity:.95}
 #loader .lname{font-family:var(--disp);font-size:26px;letter-spacing:.3em;color:var(--ink);text-transform:uppercase;text-align:center}
 #loader .lname small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--dim);margin-top:10px}
 #loader .lbar{width:220px;height:2px;background:var(--line);position:relative;overflow:hidden}
@@ -407,7 +408,7 @@ html{scroll-behavior:smooth}
   <div class="frame">
     <div class="ring" id="lring"></div>
     <div class="dash"></div>
-    <div class="core">YS</div>
+    <div class="core"><img src="assets/image.png" alt="Youth Sonata"></div>
   </div>
   <div class="lname">Youth Sonata<small>// INITIALIZING SEQUENCE</small></div>
   <div class="lbar"><i id="lbarFill"></i></div>
